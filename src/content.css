@@ -13,6 +13,7 @@
 }
   
 .InputAddOn-item{
+    width: 85px;
     background-color: hsla(31,15%,50%,.1);
     color: #666;
     font: inherit;
