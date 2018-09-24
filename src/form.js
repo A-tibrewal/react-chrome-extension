@@ -14,7 +14,7 @@ class Form extends Component {
         </div>
         <div className="InputAddOn">
             <label className="InputAddOn-item" for="resume" >Resume</label>
-            <input type="file" className="form-control" id="resume" name="resume" />
+            <input type="file" className="form-control" id="resume" name="resume" style={ { width: '200px'} }/>
         </div>
         <div className="InputAddOn">
             <label className="InputAddOn-item" for="name">Name</label>
