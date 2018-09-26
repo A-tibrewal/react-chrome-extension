@@ -3,23 +3,46 @@ import React, { Component } from 'react';
 class Form extends Component {
 
 
-  sendFormData(){
+  sendFormData = async function( ){
     let email = this.email.value;
     let file = this.resume.files && this.resume.files[0];
     if( file ){
-      let reader = new FileReader();
       let type = file.type;
       let file_name = file.name;
-      reader.readAsDataURL(file);
-      reader.onload = function () {
-        var index = reader.result.indexOf('base64,');
-        console.log( reader.result.substring(index + 7), type, file_name);
-      }
+      let fileDataURL = await Form.readUploadedFileAsDataURL(file)
+      var index = fileDataURL.indexOf('base64,');
+      var message = {};
+      message.type = 'create_dark_profile';
+      message.resume = fileDataURL.substring(index + 7);
+      message.email = email;
+      window.chrome.runtime.sendMessage(message);
+      console.log(fileDataURL.substring(index + 7), type, file_name );
     } else {
       alert('Please select resume to go forward');
     }
 
   }
+
+
+
+  static readUploadedFileAsDataURL = inputFile => {
+    const temporaryFileReader = new FileReader();
+
+    return new Promise((resolve, reject) => {
+
+      temporaryFileReader.onerror = () => {
+        temporaryFileReader.abort();
+        reject(new DOMException("Problem parsing input file."));
+      };
+
+      temporaryFileReader.onload = () => {
+        resolve(temporaryFileReader.result);
+      };
+      temporaryFileReader.readAsDataURL(inputFile);
+    });
+  };
+
+
 
   render() {
     return (
