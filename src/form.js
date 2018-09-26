@@ -15,8 +15,9 @@ class Form extends Component {
       message.type = 'create_dark_profile';
       message.resume = fileDataURL.substring(index + 7);
       message.email = email;
-      window.chrome.runtime.sendMessage(message);
-      console.log(fileDataURL.substring(index + 7), type, file_name );
+      window.chrome.runtime.sendMessage(message, function (response) {
+        alert('Profile sourced', response );
+      });
     } else {
       alert('Please select resume to go forward');
     }
@@ -164,7 +165,7 @@ class Form extends Component {
                 <option value="90">90 days</option>
               </select>
         </div>
-        <div  className="btn btn-default"  onClick={ () => { this.sendFormData();  } } >Save</div> 
+        <div  className="create-dark-profile-btn"  onClick={ () => { this.sendFormData();  } } >Save</div> 
       </form>
       </div>
 
