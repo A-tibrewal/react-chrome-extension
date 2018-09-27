@@ -12,18 +12,15 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 
 chrome.runtime.onMessage.addListener(
-     function(request, sender, sendResponse) { 
-        console.log( sendResponse);
+      function(request, sender, sendResponse) { 
         if( request.type =="create_dark_profile"){
             var new_candidate = new candidateProfile(request);
-            var response =  new_candidate.createDarkProfile();
-            sendResponse( response );
+            var response =  new_candidate.createDarkProfile( sendResponse );
         } else if ( request.type =="check_duplicate" ){
             //sendResponse( { a: 'hi'} );
             var new_candidate = new candidateProfile(request);
-            var response =  new_candidate.checkDuplicate( sendResponse );
+            var response =  new_candidate.checkDuplicate(  sendResponse );
         }
-
         return true
     }
 );
@@ -34,7 +31,7 @@ function candidateProfile( data ){
     this.name = data.name;
     this.resume = data.resume;
 
-    this.createDarkProfile = function(){
+    this.createDarkProfile = function( callback ){
         var formData = new FormData();
         formData.append('resume', this.resume );
         //var phone_number = data.phone_number;
@@ -44,7 +41,7 @@ function candidateProfile( data ){
         formData.append('xhr', true);//you can append it to formdata with a proper parameter name
         formData.append('new', true);//you can append it to formdata with a proper parameter name
         var response =  $.ajax({
-            url : HOST + '/admin/create-dark-profile',
+            url : HOST + '/prospects/add-prospect',
               dataType : 'json',
               type : 'POST',
               xhrFields: {
@@ -54,8 +51,9 @@ function candidateProfile( data ){
               contentType : false,
               processData : false,
               data : formData //formdata will contain all the other details with a name given to parameters
-          });
-        return response;
+          }).then( function( resp ){
+            callback( resp );
+        })
     }
 
     this.checkDuplicate =  function( callback ){
@@ -71,13 +69,10 @@ function candidateProfile( data ){
               xhrFields: {
                   withCredentials: true
               },
-              cache:true,
-              success: function( res ){
-                console.log( res );
-                callback( res );
-              }
+              cache:true
+        }).then( function( resp ){
+            callback( resp );
         })
     }
-
 }
 
