@@ -12,14 +12,19 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) { 
-        console.log(request, sender, sendResponse);
+     function(request, sender, sendResponse) { 
+        console.log( sendResponse);
         if( request.type =="create_dark_profile"){
             var new_candidate = new candidateProfile(request);
-            var response = new_candidate.createDarkProfile();
+            var response =  new_candidate.createDarkProfile();
             sendResponse( response );
+        } else if ( request.type =="check_duplicate" ){
+            //sendResponse( { a: 'hi'} );
+            var new_candidate = new candidateProfile(request);
+            var response =  new_candidate.checkDuplicate( sendResponse );
         }
 
+        return true
     }
 );
 
@@ -28,7 +33,8 @@ function candidateProfile( data ){
     this.email = data.email;
     this.name = data.name;
     this.resume = data.resume;
-    this.createDarkProfile = async function(){
+
+    this.createDarkProfile = function(){
         var formData = new FormData();
         formData.append('resume', this.resume );
         //var phone_number = data.phone_number;
@@ -37,7 +43,7 @@ function candidateProfile( data ){
         formData.append('name', 'aditya');
         formData.append('xhr', true);//you can append it to formdata with a proper parameter name
         formData.append('new', true);//you can append it to formdata with a proper parameter name
-        var response = await $.ajax({
+        var response =  $.ajax({
             url : HOST + '/admin/create-dark-profile',
               dataType : 'json',
               type : 'POST',
@@ -49,7 +55,29 @@ function candidateProfile( data ){
               processData : false,
               data : formData //formdata will contain all the other details with a name given to parameters
           });
-          return response;
+        return response;
     }
+
+    this.checkDuplicate =  function( callback ){
+        var data = {
+            email: this.email,
+            phone_number: this.phone_number
+        }
+        var response =  $.ajax({
+            type: "GET",
+              url: HOST + '/admin/duplicate-profile',
+              data: data,
+              dataType: 'json',
+              xhrFields: {
+                  withCredentials: true
+              },
+              cache:true,
+              success: function( res ){
+                console.log( res );
+                callback( res );
+              }
+        })
+    }
+
 }
 

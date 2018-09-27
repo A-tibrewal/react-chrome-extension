@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Form extends Component {
 
 
-  sendFormData = async function( ){
+  createDarkProfile = async function( ){
     let email = this.email.value;
     let file = this.resume.files && this.resume.files[0];
     if( file ){
@@ -16,7 +16,7 @@ class Form extends Component {
       message.resume = fileDataURL.substring(index + 7);
       message.email = email;
       window.chrome.runtime.sendMessage(message, function (response) {
-        alert('Profile sourced', response );
+        console.log( response );
       });
     } else {
       alert('Please select resume to go forward');
@@ -24,13 +24,19 @@ class Form extends Component {
 
   }
 
-
+  checkDuplicate = function(){
+    var message = {};
+    message.type = 'check_duplicate';
+    message.email = this.email.value;
+    message.phone_number = this.phone_number.value;
+    window.chrome.runtime.sendMessage(message, function (response) {
+      console.log( response );
+    });
+  }
 
   static readUploadedFileAsDataURL = inputFile => {
     const temporaryFileReader = new FileReader();
-
     return new Promise((resolve, reject) => {
-
       temporaryFileReader.onerror = () => {
         temporaryFileReader.abort();
         reject(new DOMException("Problem parsing input file."));
@@ -51,11 +57,14 @@ class Form extends Component {
         <form novalidate="true">
           <div className="InputAddOn">
               <label className="InputAddOn-item" for="phone_number" >Contact</label>
-              <input type="text" required="true" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number" autocomplete="off" />
+              <input type="text" required="true" class="form-control" ref={input => this.phone_number = input} id="phone_number" name="phone_number" placeholder="Phone Number" autocomplete="off" />
           </div>
           <div className="InputAddOn">
               <label className="InputAddOn-item" for="email">Email</label>
               <input type="text" className="form-control" ref={input => this.email = input} id="email" name="email" placeholder="Email" />
+          </div>
+          <div className="InputAddOn">
+            <div class="create-dark-profile-btn" onClick={ () => { this.checkDuplicate();  } } >check</div>
           </div>
           <div className="InputAddOn">
               <label className="InputAddOn-item" for="resume" >Resume</label>
@@ -165,7 +174,7 @@ class Form extends Component {
                 <option value="90">90 days</option>
               </select>
         </div>
-        <div  className="create-dark-profile-btn"  onClick={ () => { this.sendFormData();  } } >Save</div> 
+        <div  className="create-dark-profile-btn"  onClick={ () => { this.createDarkProfile();  } } >Save</div> 
       </form>
       </div>
 
