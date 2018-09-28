@@ -41,7 +41,7 @@ function candidateProfile( data ){
         formData.append('xhr', true);//you can append it to formdata with a proper parameter name
         formData.append('new', true);//you can append it to formdata with a proper parameter name
         var response =  $.ajax({
-            url : HOST + '/prospects/add-prospect',
+            url : HOST + '/admin/create-dark-profile',
               dataType : 'json',
               type : 'POST',
               xhrFields: {

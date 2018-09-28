@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 
 class Form extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: '',
+      success: false
+    };
+  }
+
 
   createDarkProfile = async function( ){
     let email = this.email.value;
@@ -29,8 +37,15 @@ class Form extends Component {
     message.type = 'check_duplicate';
     message.email = this.email.value;
     message.phone_number = this.phone_number.value;
+    let that = this;
     window.chrome.runtime.sendMessage(message, function (response) {
       console.log( response );
+      that.setState({
+        success: response.success,
+        duplicate: response.duplicate,
+        resume_present: response.resume_present,
+        user_id: response.user_id
+      })
     });
   }
 
@@ -51,10 +66,19 @@ class Form extends Component {
 
 
 
+
+
   render() {
+    let response = this.state;
+
+    let duplicate_profile = (<div>This profile is already preset</div>)
+
     return (
       <div className="profile-form">
         <form novalidate="true">
+          <div class="message_box">
+           {response && response.success ? duplicate_profile : null }
+          </div>
           <div className="InputAddOn">
               <label className="InputAddOn-item" for="phone_number" >Contact</label>
               <input type="text" required="true" class="form-control" ref={input => this.phone_number = input} id="phone_number" name="phone_number" placeholder="Phone Number" autocomplete="off" />
