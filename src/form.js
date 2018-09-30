@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 
 class Form extends Component {
 
@@ -19,34 +20,60 @@ class Form extends Component {
       let file_name = file.name;
       let fileDataURL = await Form.readUploadedFileAsDataURL(file)
       var index = fileDataURL.indexOf('base64,');
-      var message = {};
-      message.type = 'create_dark_profile';
-      message.resume = fileDataURL.substring(index + 7);
-      message.email = email;
-      window.chrome.runtime.sendMessage(message, function (response) {
-        console.log( response );
-      });
+      this.resume_data_url = fileDataURL.substring(index + 7);
+      var formData = new FormData();
+      formData.append('resume', this.resume_data_url);
+      //var phone_number = data.phone_number;
+      var HOST = 'http://localhost:3000';
+      formData.append('profile_status', 'dark_profile');
+      formData.append('email', email );
+      formData.append('name', 'aditya');
+      formData.append('xhr', true);//you can append it to formdata with a proper parameter name
+      formData.append('new', true);//you can append it to formdata with a proper parameter name
+      $.ajax({
+          url : HOST + '/admin/create-dark-profile',
+            dataType : 'json',
+            type : 'POST',
+            xhrFields: {
+                withCredentials: true
+            },
+            cache : true,
+            contentType : false,
+            processData : false,
+            data : formData //formdata will contain all the other details with a name given to parameters
+        }).then( function( resp ){
+          console.log( resp );
+      })
+
     } else {
       alert('Please select resume to go forward');
     }
-
   }
 
   checkDuplicate = function(){
-    var message = {};
+    let message = {};
     message.type = 'check_duplicate';
     message.email = this.email.value;
     message.phone_number = this.phone_number.value;
-    let that = this;
-    window.chrome.runtime.sendMessage(message, function (response) {
-      console.log( response );
-      that.setState({
-        success: response.success,
-        duplicate: response.duplicate,
-        resume_present: response.resume_present,
-        user_id: response.user_id
-      })
-    });
+    //var HOST = 'https://www.interviewbit.com';
+    var HOST = 'http://localhost:3000';
+    let url = HOST + '/admin/duplicate-profile';
+    console.log( url );
+    var data  = {
+      email: this.email.value
+    }
+    var response =  $.ajax({
+      type: "GET",
+        url: HOST + '/admin/duplicate-profile',
+        data: data,
+        dataType: 'json',
+        xhrFields: {
+            withCredentials: true
+        },
+        cache:true
+    }).then( function( resp ){
+        console.log( resp );
+    })
   }
 
   static readUploadedFileAsDataURL = inputFile => {
