@@ -11,8 +11,14 @@ class Form extends Component {
     };
   }
 
+  componentWillMount(){
+    window.chromeExtenionVars = {
+      host: 'http://localhost:3000',
+      //host: 'https://www.interviewbit.com'
+    };
+  }
 
-  createDarkProfile = async function( ){
+  submitFormHandler = async function( ){
     let email = this.email.value;
     let file = this.resume.files && this.resume.files[0];
     if( file ){
@@ -21,17 +27,34 @@ class Form extends Component {
       let fileDataURL = await Form.readUploadedFileAsDataURL(file)
       var index = fileDataURL.indexOf('base64,');
       this.resume_data_url = fileDataURL.substring(index + 7);
+      this.createDarkProfile();
+    }  else {
+       alert('Please select resume to go forward');
+   }
+
+  }
+
+
+  createDarkProfile = async function( ){
       var formData = new FormData();
       formData.append('resume', this.resume_data_url);
-      //var phone_number = data.phone_number;
-      var HOST = 'http://localhost:3000';
       formData.append('profile_status', 'dark_profile');
-      formData.append('email', email );
-      formData.append('name', 'aditya');
+      formData.append('email', this.email.value );
+      formData.append('name', this.name.value );
+      formData.append('university', this.university.value);
+      formData.append('orgyear', this.orgyear.value);
+      formData.append('degree', this.degree.value);
+      formData.append('field', this.field.value);
+      formData.append('position', this.position.value);
+      formData.append('orgname', this.orgname.value);
+      formData.append('city', this.city.value);
+      formData.append('base_ctc', this.base_ctc.value );
+      formData.append('variable_ctc', this.variable_ctc.value );
+      formData.append('notice_period', this.notice_period.value );
       formData.append('xhr', true);//you can append it to formdata with a proper parameter name
       formData.append('new', true);//you can append it to formdata with a proper parameter name
       $.ajax({
-          url : HOST + '/admin/create-dark-profile',
+          url : window.chromeExtenionVars.host + '/admin/create-dark-profile',
             dataType : 'json',
             type : 'POST',
             xhrFields: {
@@ -45,26 +68,16 @@ class Form extends Component {
           console.log( resp );
       })
 
-    } else {
-      alert('Please select resume to go forward');
-    }
   }
 
   checkDuplicate = function(){
-    let message = {};
-    message.type = 'check_duplicate';
-    message.email = this.email.value;
-    message.phone_number = this.phone_number.value;
-    //var HOST = 'https://www.interviewbit.com';
-    var HOST = 'http://localhost:3000';
-    let url = HOST + '/admin/duplicate-profile';
-    console.log( url );
     var data  = {
-      email: this.email.value
+      email: this.email.value,
+      phone_number: this.phone_number.value
     }
-    var response =  $.ajax({
+    $.ajax({
       type: "GET",
-        url: HOST + '/admin/duplicate-profile',
+        url: window.chromeExtenionVars.host +  + '/admin/duplicate-profile',
         data: data,
         dataType: 'json',
         xhrFields: {
@@ -225,10 +238,9 @@ class Form extends Component {
                 <option value="90">90 days</option>
               </select>
         </div>
-        <div  className="create-dark-profile-btn"  onClick={ () => { this.createDarkProfile();  } } >Save</div> 
+        <div  className="create-dark-profile-btn"  onClick={ () => { this.submitFormHandler();  } } >Save</div> 
       </form>
       </div>
-
     );
   }
 }
