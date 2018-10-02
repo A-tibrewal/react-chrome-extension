@@ -18,6 +18,73 @@ class Form extends Component {
       return 'https://www.interviewbit.com'
   }
 
+  addFileToS3( type, file_name, file_obj ){
+    this.ppdURL = this.getHost() + '/admin/get-ppd';
+    this.bucket = 'ib-public-profile-dump';
+    this.bucketRegion = 'us-west-2';
+    this.getPostPolicyDocument(type, file_name, file_obj);
+  }
+
+  getDataDump(data){
+    let location = window.location;
+    data.source = location.host == 'resdex.naukri.com' ? 'naukri' : 'linkedin'
+    if( data.source == 'naukri' ){
+      data.url = location.href;
+    } else {
+      data.url = location.pathname;
+    }
+    data.dump = "<html>" + $("html").html() + "</html>";
+    return data;
+  }  
+
+
+  getPostPolicyDocument = function(type, file_name, file_obj) {
+    var that = this;
+    let url = this.ppdURL;
+    var data = {
+      url: file_obj['url'],
+      source: file_obj['source'],
+      email: file_obj['email'],
+      phone_number: file_obj['phone_number'],
+      type: file_obj['type'] || ''
+    };
+
+    url = new window.URL(url);
+    url.search = new URLSearchParams(data);
+
+    fetch( url, {
+      credentials: 'include'
+    }).then(
+      res => res.json()
+    )
+    .then(
+      json => {
+        let s3_url = 'https://' + that.bucket + '.s3.amazonaws.com/';
+        var formData = that.populateFormData(json.signed_s3_post, file_obj['dump']);
+        fetch( s3_url, {
+          method: 'POST',
+          body: formData 
+        } )
+      }
+    )
+  }
+
+
+  populateFormData = function(signed_s3_post, file_content) {
+    var formData = new FormData();
+    formData.append('key', signed_s3_post['key']);
+    formData.append('acl', signed_s3_post['acl']);
+    formData.append('Content-Type', 'text/plain');
+    formData.append('AWSAccessKeyId', signed_s3_post['access_key']);
+    formData.append('policy', signed_s3_post['policy']);
+    formData.append('signature', signed_s3_post['signature']);
+    var data = new Blob([ file_content ], {
+      type: 'text/plain'
+    });
+    formData.append('file',  data );
+    return formData;
+    }
+
   // componentWillMount(){
   //   window.chromeExtenionVars = {
   //     host: '',
@@ -98,6 +165,10 @@ class Form extends Component {
       email: this.email.value,
       phone_number: this.phone_number.value
     }
+
+    let fileObj = this.getDataDump( {email: data.email,phone_number: data.phone_number} );
+    this.addFileToS3('linkedin', Date.now(), fileObj);
+
     $.ajax({
       type: "GET",
         url: that.getHost() + '/admin/duplicate-profile',
