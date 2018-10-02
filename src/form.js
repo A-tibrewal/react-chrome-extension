@@ -11,12 +11,19 @@ class Form extends Component {
     };
   }
 
-  componentWillMount(){
-    window.chromeExtenionVars = {
-      host: 'http://localhost:3000',
-      //host: 'https://www.interviewbit.com'
-    };
+  getHost( dev = true ){
+    if( dev )
+      return 'http://localhost:3000'
+    else
+      return 'https://www.interviewbit.com'
   }
+
+  // componentWillMount(){
+  //   window.chromeExtenionVars = {
+  //     host: '',
+  //     //host: 'https://www.interviewbit.com'
+  //   };
+  // }
 
   submitFormHandler = async function( ){
     let email = this.email.value;
@@ -34,6 +41,19 @@ class Form extends Component {
 
   }
 
+
+  makeMessageBox( response, type){
+    let message = '';
+    if( response.success ){
+      message = 'Profile ' + ( response.duplicate ? 'Present' : 'absent' ) +
+         '<br/> Resume ' + ( response.resume_present ? 'Present' : 'absent' );
+    } else {
+      message = 'Profile Absent'
+    }
+    this.setState({
+      message: message
+    })
+  }
 
   createDarkProfile = async function( ){
       var formData = new FormData();
@@ -53,8 +73,9 @@ class Form extends Component {
       formData.append('notice_period', this.notice_period.value );
       formData.append('xhr', true);//you can append it to formdata with a proper parameter name
       formData.append('new', true);//you can append it to formdata with a proper parameter name
+      var that = this;
       $.ajax({
-          url : window.chromeExtenionVars.host + '/admin/create-dark-profile',
+          url : that.getHost() + '/admin/create-dark-profile',
             dataType : 'json',
             type : 'POST',
             xhrFields: {
@@ -67,17 +88,19 @@ class Form extends Component {
         }).then( function( resp ){
           console.log( resp );
       })
-
   }
 
+
   checkDuplicate = function(){
+    var that = this;
+    console.log('check Profile', that.getHost());
     var data  = {
       email: this.email.value,
       phone_number: this.phone_number.value
     }
     $.ajax({
       type: "GET",
-        url: window.chromeExtenionVars.host +  + '/admin/duplicate-profile',
+        url: that.getHost() + '/admin/duplicate-profile',
         data: data,
         dataType: 'json',
         xhrFields: {
@@ -85,7 +108,11 @@ class Form extends Component {
         },
         cache:true
     }).then( function( resp ){
-        console.log( resp );
+        that.makeMessageBox( resp );
+    },function(){
+        that.setState({
+          message: "NOT AUTHORIZED. Please login with your admin account"
+        })
     })
   }
 
@@ -105,19 +132,14 @@ class Form extends Component {
   };
 
 
-
-
-
   render() {
-    let response = this.state;
-
-    let duplicate_profile = (<div>This profile is already preset</div>)
+    let message = this.state.message;
 
     return (
       <div className="profile-form">
         <form novalidate="true">
           <div class="message_box">
-           {response && response.success ? duplicate_profile : null }
+            <span dangerouslySetInnerHTML={{ __html: message }} />
           </div>
           <div className="InputAddOn">
               <label className="InputAddOn-item" for="phone_number" >Contact</label>

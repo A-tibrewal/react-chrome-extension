@@ -25,10 +25,11 @@ class Main extends React.Component {
                    ({document, window}) => {
                       // Render Children
                         return (
-                           <div className={'my-extension'}>
-                               <h1>InterviewBit Plus</h1>
-                               <button onClick= { () => { this.addProfile()} } > Add Profile </button>
-                               <Form />
+                            <div>
+                                <header>InterviewBit Plus</header>
+                                <div className={'my-extension'}>
+                                    <Form />
+                                </div>
                            </div>
                         )
                     }
