@@ -25,7 +25,7 @@ class Scrapper {
         } else if( position.indexOf('engineering leadership') != -1 ){
             return 'Engineering Leadership';
         } else {
-            return 'Other';
+            return '';
         }
     }
 
@@ -42,7 +42,7 @@ class Scrapper {
         } else if( degree.indexOf('mba') != -1 ){
           return 'BE + MBA'
         } else {
-          return 'Other';
+          return '';
         }
     }
 
@@ -60,7 +60,7 @@ class Scrapper {
         } else if( field.indexOf('Electrical') != -1 ){
             return 'Electrical';
         } else {
-            return 'Other';
+            return '';
         }
     }
 
@@ -78,8 +78,8 @@ class Scrapper {
         } 
 
         profileData.position = Scrapper.getPosition(profileData.position);
-        profileData.field = Scrapper.getPosition(profileData.field);
-        profileData.degree = Scrapper.getPosition(profileData.degree);
+        profileData.field = Scrapper.getField(profileData.field);
+        profileData.degree = Scrapper.getDegree(profileData.degree);
         return {
             success: true,
             message: 'Imported !!',

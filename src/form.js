@@ -222,6 +222,15 @@ class Form extends Component {
     });
   };
 
+  handleSelectChange(event, fieldname){
+    let value = event.target.value;
+    let newProfileData = this.state.profileData;
+    newProfileData[fieldname] = value;
+    this.setState({
+      profileData: newProfileData
+    })
+  }
+
 
   render() {
     let message = this.state.message;
@@ -263,7 +272,7 @@ class Form extends Component {
         </div>
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="degreer">Degree</label>
-          <select class="form-control" type="text" name='degree' ref={input => this.degree = input} id="degree" required="true" defaultValue={profileData.degree}>
+          <select class="form-control" type="text" name='degree' ref={input => this.degree = input} id="degree" required="true" value={profileData.degree} onChange={ (ev) => { this.handleSelectChange(ev,'degree') } }>
                   <option value="">Choose Degree</option>
                   <option value="BE/B.Tech/BS">BE/B.Tech/BS</option>
                   <option value="ME/M.Tech">ME/M.Tech</option>
@@ -278,7 +287,7 @@ class Form extends Component {
         </div>
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="field">Field</label>
-          <select className="form-control" type="text" name='field' ref={input => this.field = input} id="field" required="true" defaultValue={profileData.field}>
+          <select className="form-control" type="text" name='field' ref={input => this.field = input} id="field" required="true" value={profileData.field} onChange={ (ev) => { this.handleSelectChange(ev,'field') }}>
                   <option value="">Choose Stream</option>
                   <option value="Computer Science">Computer Science</option>
                   <option value="Information Technology">Information Technology</option>
@@ -292,7 +301,7 @@ class Form extends Component {
 
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="position">Position</label>
-          <select className="form-control" type="text" name='position' ref={input => this.position = input} id="position"  required="true" defaultValue={profileData.position}>
+          <select className="form-control" type="text" name='position' ref={input => this.position = input} id="position"  required="true" value={profileData.position} onChange={ (ev) => { this.handleSelectChange(ev,'position')} } >
                   <option value="">Choose Job Position</option>
                   <option value="Engineering Leadership">Engineering Leadership</option>
                   <option value="Backend Engineer">Backend Engineer</option>
