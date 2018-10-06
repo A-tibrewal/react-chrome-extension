@@ -113,12 +113,21 @@ class Form extends Component {
 
   makeMessageBox( response, type){
     let message = '';
-    if( response.success ){
-      message = 'Profile ' + ( response.duplicate ? 'Present' : 'absent' ) +
-         '<br/> Resume ' + ( response.resume_present ? 'Present' : 'absent' );
+    if( type === 'check'){
+      if( response.success ){
+        message = 'Profile ' + ( response.duplicate ? 'Present' : 'absent' ) +
+           '<br/> Resume ' + ( response.resume_present ? 'Present' : 'absent' );
+      } else {
+        message = 'Profile Absent'
+      }
     } else {
-      message = 'Profile Absent'
+      if( response.success ){
+        message = `Saved: <a href="${ this.getHost +  '/admin/candidates#id=' + response.user_id } " >Click here </a> to see on Dashboad`;
+      } else {
+        message = response.message;
+      }
     }
+
     this.setState({
       message: message
     })
@@ -156,7 +165,7 @@ class Form extends Component {
             processData : false,
             data : formData //formdata will contain all the other details with a name given to parameters
         }).then( function( resp ){
-          console.log( resp );
+            that.makeMessageBox( resp, 'create');
       },function(){
         that.setState({
           message: "NOT AUTHORIZED. Please login with your admin account"
