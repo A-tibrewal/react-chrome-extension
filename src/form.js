@@ -115,8 +115,8 @@ class Form extends Component {
     let message = '';
     if( type === 'check'){
       if( response.success ){
-        message = 'Profile ' + ( response.duplicate ? 'Present' : 'absent' ) +
-           '  Resume ' + ( response.resume_present ? 'Present' : 'absent' ) + 
+        message = 'Profile -' + ( response.duplicate ? 'Present' : 'absent' ) +
+           '  Resume -' + ( response.resume_present ? 'Present' : 'absent' ) + 
            '<br/> <a target="_blank" href="' + this.getHost() +
             '/admin/candidates#id0eq='+response.user_id +'" >Click here </a> to see on Dashboad'; 
       } else {
