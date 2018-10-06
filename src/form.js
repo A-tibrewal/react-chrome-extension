@@ -116,13 +116,16 @@ class Form extends Component {
     if( type === 'check'){
       if( response.success ){
         message = 'Profile ' + ( response.duplicate ? 'Present' : 'absent' ) +
-           '<br/> Resume ' + ( response.resume_present ? 'Present' : 'absent' );
+           '  Resume ' + ( response.resume_present ? 'Present' : 'absent' ) + 
+           '<br/> <a target="_blank" href="' + this.getHost() +
+            '/admin/candidates#id0eq='+response.user_id +'" >Click here </a> to see on Dashboad'; 
       } else {
         message = 'Profile Absent'
       }
     } else {
       if( response.success ){
-        message = `Saved: <a href="${ this.getHost +  '/admin/candidates#id=' + response.user_id } " >Click here </a> to see on Dashboad`;
+        message = `Saved: <a target="_blank" href="${ this.getHost() +
+            '/admin/candidates#id0eq=' + response.user_id } " >Click here </a> to see on Dashboad`;
       } else {
         message = response.message;
       }
@@ -213,7 +216,7 @@ class Form extends Component {
         },
         cache:true
     }).then( function( resp ){
-        that.makeMessageBox( resp );
+        that.makeMessageBox( resp, 'check');
     },function(){
         that.setState({
           message: "NOT AUTHORIZED. Please login with your admin account"
