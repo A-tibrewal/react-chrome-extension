@@ -129,6 +129,7 @@ class Form extends Component {
       formData.append('resume', this.resume_data_url);
       formData.append('profile_status', 'dark_profile');
       formData.append('email', this.email.value );
+      formData.append('phone_number', this.email.phone_number );
       formData.append('name', this.name.value );
       formData.append('university', this.university.value);
       formData.append('orgyear', this.orgyear.value);
