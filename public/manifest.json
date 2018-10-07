@@ -1,6 +1,7 @@
 {
-  "short_name": "My Extension",
-  "name": "My Extension",
+  "short_name": "IB Plus",
+  "name": "Interviewbit Plus",
+  "description": "Extends exisitng admin tool to add public candidate profile pages to InterviewBit platform in one click",
   "version": "1.0",
   "manifest_version": 2,
   "background": {
