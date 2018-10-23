@@ -104,10 +104,34 @@ class Form extends Component {
       var index = fileDataURL.indexOf('base64,');
       this.resume_data_url = fileDataURL.substring(index + 7);
       this.createDarkProfile();
-    }  else {
+    } else if( window.location.host == 'resdex.naukri.com'){
+      let file =  await this.fetchResumeFromNaukri();
+      let fileDataURL = await Form.readUploadedFileAsDataURL(file);
+      var index = fileDataURL.indexOf('base64,');
+      this.resume_data_url = fileDataURL.substring(index + 7);
+      this.createDarkProfile();
+    }  
+    else {
        alert('Please select resume to go forward');
    }
 
+  }
+
+
+
+  async fetchResumeFromNaukri(){
+    var url = $('#jump-CV .heading-cont .fr.heading a').attr('href');
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'blob';
+    return new Promise( (resolve, reject) => {
+      xhr.onload = function (e) {
+        if (this.status == 200) {
+          resolve( this.response );
+        }
+      }
+      xhr.send();
+    });
   }
 
 
