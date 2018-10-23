@@ -266,7 +266,7 @@ class Form extends Component {
           </div>
           <div className="InputAddOn">
               <label className="InputAddOn-item" for="email">Email</label>
-              <input type="text" className="form-control" ref={input => this.email = input} id="email" name="email" placeholder="Email" />
+              <input type="text" className="form-control" ref={input => this.email = input} defaultValue={profileData.email} id="email" name="email" placeholder="Email" />
           </div>
           <div className="InputAddOn">
             <div class="create-dark-profile-btn" onClick={ () => { this.checkDuplicate();  } } >check</div>
@@ -285,7 +285,7 @@ class Form extends Component {
         </div>
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="orgyear">Grad Yr</label>
-          <input type="number" className="form-control" ref={input => this.orgyear = input} defaultValue={profileData.orgyear} id="orgyear" name="orgyear" placeholder="Graduation Year" autocomplete="off" required="true" type="number" />
+          <input type="number" className="form-control" defaultValue={profileData.orgyear} ref={input => this.orgyear = input} defaultValue={profileData.orgyear} id="orgyear" name="orgyear" placeholder="Graduation Year" autocomplete="off" required="true" type="number" />
         </div>
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="degreer">Degree</label>

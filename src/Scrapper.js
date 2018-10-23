@@ -71,7 +71,7 @@ class Scrapper {
         if ( (/\/in\/[\w-]+\//g).test(location.pathname) ){
             profileData = Scrapper.getLinkedInData();
         } 
-        else if ( location.href.indexOf('resdex.naukri.com/v2/preview/preview') === -1 ) {
+        else if ( location.href.indexOf('resdex.naukri.com/v2/preview/preview') !== -1 ) {
             profileData = Scrapper.getNaukriData();
         } else {
             return { success: false, message: 'Not a Profile Page' }
@@ -123,11 +123,10 @@ class Scrapper {
         data.university = Scrapper.getValueFromElement('pgIns') || Scrapper.getValueFromElement('ugIns');
         //data.summary =  (document.getElementsByClassName('pv-top-card-section__summary')).length ? (document.getElementsByClassName('pv-top-card-section__summary')[0]).textContent : '';
         data.location = $('.locInfo').text().match(/[a-z]+/gi).pop();
-        data.orgyear = Scrapper.getValueFromElement('education-inner .detail') && 
-        Scrapper.getValueFromElement('education-inner .detail').match(/([0-9]+)/gi)[0];
-        data.degree = Scrapper.getValueFromElement('education-inner .deg');
+        data.orgyear =  $('.education-inner .detail').text().match(/([0-9]+)/gi)[0];
+        data.degree = Scrapper.getDegree($('.education-inner .deg').text());
         data.base_ctc = Scrapper.getValueFromElement('salInfo').match(/([0-9\.]+)/gi)[0];
-        data.field = Scrapper.getValueFromElement('education-inner .deg');
+        data.field = Scrapper.getField( $('.education-inner .deg').text());
         data.position = Scrapper.getValueFromElement('pv-top-card-section__headline') && 
         Scrapper.getValueFromElement('pv-top-card-section__headline').split('at')[0].trim();
         data.email = Scrapper.getValueFromElement('bkt4.email');
