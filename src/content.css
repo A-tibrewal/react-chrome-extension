@@ -139,3 +139,70 @@ header{
     margin-bottom: 15px;
     line-height: 25px;
 }
+
+.accordion {
+    border-radius: 5px;
+    border: 1px solid #d9d9d9;
+  }
+  .accordion .accordion-item:first-child .title {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  .accordion .accordion-item:last-child .title {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .accordion .accordion-item .title {
+    background-color: #f6f6f6;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+  }
+  .accordion .accordion-item .title:after {
+    content: '\02795';
+    /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+  }
+  .accordion .accordion-item .panel {
+    max-height: 0;
+    transition: max-height 0.15s ease-out;
+    overflow: hidden;
+  }
+  .accordion .accordion-item.active .title {
+    background-color: #eeeeee;
+  }
+  .accordion .accordion-item.active .title:after {
+    content: '\2796';
+    /* Unicode character for "minus" sign (-) */
+  }
+  .accordion .accordion-item.active .panel {
+    max-height: 500px;
+    transition: max-height 0.25s ease-in;
+  }
+
+#my-extension-root table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#my-extension-root th,#my-extension-root td {
+    text-align: left;
+    padding: 8px;
+}
+
+#my-extension-root tr:nth-child(even){
+    background-color: #f2f2f2
+}
+
+#my-extension-root th {
+    background-color: #4CAF50;
+    color: white;
+}
