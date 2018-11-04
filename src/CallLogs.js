@@ -6,7 +6,7 @@ const CallLogs = ({ call_data }) => (
     {
         call_data.length ? (
             call_data.map(( item ) =>  
-            (<tr><td>{item.from_number}</td> <td>{ moment( new Date(item.call_timestamp) ).format('ddd, DD/MM/YY h:mm A') }</td> </tr> )
+            (<tr><td>{item.from_number}</td> <td>{ moment( new Date(item.call_timestamp) ).format('ddd, DD MMM YY h:mm A') }</td> </tr> )
             ) ) : 'No call logs'  
     }
     </table> 

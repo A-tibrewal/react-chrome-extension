@@ -11,7 +11,7 @@ const CompanyData = ({ company_data }) => (
             </tr>
             <tr>
                  <td>Job Profile</td> 
-                 <td>{item.job_profile_id}</td> 
+                 <td>{item.job_profile_name}</td> 
              </tr>
              <tr>
                  <td>Status</td> 
