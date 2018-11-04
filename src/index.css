@@ -59,7 +59,7 @@ body {
   overflow: hidden;
 }
 .accordion .accordion-item.active .title {
-  background-color: #eeeeee;
+  background-color: #97c3c3;
 }
 .accordion .accordion-item.active .title:after {
   content: '\2796';
@@ -67,6 +67,7 @@ body {
 }
 .accordion .accordion-item.active .panel {
   max-height: 500px;
+  overflow: scroll;
   transition: max-height 0.25s ease-in;
 }
 
