@@ -87,11 +87,6 @@ class Scrapper {
         }
     }
 
-
-    
-    
-    
-
     static getLinkedInData() {
         let location = window.location;
         if (location.hostname.indexOf('linkedin') === -1) {
@@ -99,7 +94,9 @@ class Scrapper {
         }
         var data = {};
         data.source = "linkedin";
-        data.phone_number = $('.pv-contact-info__ci-container').text() && $('.pv-contact-info__ci-container').text().match(/[0-9]{10}/g)[0];
+        data.phone_number = $('.pv-contact-info__ci-container').text() && 
+                            $('.pv-contact-info__ci-container').text().match(/[0-9]{10}/g) && 
+                            $('.pv-contact-info__ci-container').text().match(/[0-9]{10}/g)[0];
         data.name = Scrapper.getValueFromElement('pv-top-card-section__name');
         data.company = Scrapper.getValueFromElement('pv-entity__secondary-title');
         data.university = Scrapper.getValueFromElement('pv-entity__school-name');
