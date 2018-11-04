@@ -4,18 +4,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Frame, { FrameContextConsumer} from 'react-frame-component';
 import Form from './form';
+import Details from './Details';
 import "./content.css";
+import Router, { Link, goBack } from 'route-lite';
 
 class Main extends React.Component {
-    
-    addProfile() {
-        console.log( 'name' );
-    }
-
-    componentDidMount(){
-
-    }
-
     render() {
         return (
             <Frame head={[<link type="text/css" rel="stylesheet" href={chrome.runtime.getURL("/static/css/content.css")} ></link>]}> 
@@ -30,6 +23,7 @@ class Main extends React.Component {
                                 <div className={'my-extension'}>
                                     <Form />
                                 </div>
+                                
                            </div>
                         )
                     }
@@ -44,7 +38,7 @@ const app = document.createElement('div');
 app.id = "my-extension-root";
 
 document.body.appendChild(app);
-ReactDOM.render(<Main />, app);
+ReactDOM.render(<Router><Main /></Router>, app);
 
 app.style.display = "none";
 

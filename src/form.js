@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import Scrapper from './Scrapper';
+import Details from './Details';
+import { goTo } from 'route-lite';
 
 class Form extends Component {
 
@@ -241,6 +243,7 @@ class Form extends Component {
         cache:true
     }).then( function( resp ){
         that.makeMessageBox( resp, 'check');
+        goTo(Details, resp );
     },function(){
         that.setState({
           message: "NOT AUTHORIZED. Please login with your admin account"
