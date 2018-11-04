@@ -34,8 +34,6 @@ body {
   border-bottom-right-radius: 5px;
 }
 .accordion .accordion-item .title {
-  background-color: #f6f6f6;
-  color: #444;
   cursor: pointer;
   padding: 18px;
   width: 100%;
@@ -43,6 +41,9 @@ body {
   border: none;
   outline: none;
   transition: 0.4s;
+  background-color: #97c3c3;
+  color: white;
+  font-size: 18px;
 }
 .accordion .accordion-item .title:after {
   content: '\02795';
@@ -86,4 +87,17 @@ body {
 #my-extension-root th {
   background-color: #4CAF50;
   color: white;
+}
+
+.back-wrapper{
+  background-color: darkcyan;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.company-data tr td{
+  width: 50%;
 }

@@ -11,20 +11,19 @@ class Details extends Component {
         return (
             <div >
                 <div style={ { 'padding': '20px' } }>
-                <div onClick={ () => goBack() } className="back-wrapper" >  Go Back </div>
-                    Candidate details
+                <div onClick={ () => goBack() } className="back-wrapper" > {"<"} Go Back </div>
                 <div>
-                <Accordion atomic={true} >
-                    <AccordionItem title="Personal Data">
-                        <UserData user_data = {user_data} />
-                    </AccordionItem>
-                    <AccordionItem title="Company Data">
-                        <CompanyData company_data = {company_data} />
-                    </AccordionItem>
-                    <AccordionItem title="Call Logs">
-                        <CallLogs call_data = {call_data} />
-                    </AccordionItem>
-                </Accordion>
+                    <Accordion atomic={true} >
+                        <AccordionItem title="Personal Data">
+                            <UserData user_data = {user_data} />
+                        </AccordionItem>
+                        <AccordionItem title="Company Data">
+                            <CompanyData company_data = {company_data} />
+                        </AccordionItem>
+                        <AccordionItem title="Call Logs">
+                            <CallLogs call_data = {call_data} />
+                        </AccordionItem>
+                    </Accordion>
                 </div>
                 </div>
             </div>

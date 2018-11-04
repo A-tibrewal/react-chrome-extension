@@ -1,6 +1,6 @@
 import React from 'react';
 const CompanyData = ({ company_data }) => (
-        <div>
+        <div class="company-data">
         { company_data.length ? (
             company_data.map(( item ) =>  
             (
