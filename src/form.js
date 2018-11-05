@@ -152,8 +152,6 @@ class Form extends Component {
         message = response.message;
       }
     }
-    console.log(message);
-
       this.setState({
         message: message,
         loading: false
@@ -202,17 +200,18 @@ class Form extends Component {
 
 
   importProfile(){
+    this.forceUpdate();
     let location = window.location;
-    if(  (/in\/[\w-]+\/detail\/contact-info\/$/).test(location.pathname) || 
-         (/in\/[\w-]+\/$/).test(location.pathname) ||
-         ( location.pathname == '/v2/preview/preview' ) )
-      {
-
-        let data = Scrapper.getProfileData();
-        this.setState({
-          profileData : data['profileData'],
-          message: data['message']
-        });
+    if((/in\/[\w-]+\/detail\/contact-info\/$/).test(location.pathname) || (/in\/[\w-]+\/$/).test(location.pathname) || ( location.pathname == '/v2/preview/preview' ) ) {
+          this.setState({
+            profileData: {}
+          });
+          document.querySelectorAll('.InputAddOn input').forEach( (i) => {i.value =""});
+          let data = Scrapper.getProfileData();
+          this.setState({
+            profileData : data['profileData'],
+            message: data['message']
+          });
       } else {
         this.setState({
           message: 'Not a profile page'
@@ -293,7 +292,7 @@ class Form extends Component {
 
   render() {
     let {message, loading, profileData} = this.state;
-
+    let timestamp = new Date();
     return (
       <div className="profile-form">
         <form novalidate="true">
@@ -304,11 +303,11 @@ class Form extends Component {
           <div class="import-profile" onClick={() => this.importProfile() }>Import</div>
           <div className="InputAddOn">
               <label className="InputAddOn-item" for="phone_number" >Contact</label>
-              <input type="text" required="true" class="form-control" defaultValue={profileData.phone_number} ref={input => this.phone_number = input} id="phone_number" name="phone_number" placeholder="Phone Number" autocomplete="off" />
+              <input type="text" required="true" name="phone_number" class="form-control" key={`phone_number:${timestamp }`}  defaultValue={profileData.phone_number} ref={input => this.phone_number = input} id="phone_number" placeholder="Phone Number" autocomplete="off" />
           </div>
           <div className="InputAddOn">
               <label className="InputAddOn-item" for="email">Email</label>
-              <input type="text" className="form-control" ref={input => this.email = input} defaultValue={profileData.email} id="email" name="email" placeholder="Email" />
+              <input type="text" name="email" className="form-control" key={`email:${timestamp }`}  ref={input => this.email = input} defaultValue={profileData.email} id="email" placeholder="Email" />
           </div>
           <div className="InputAddOn">
             <div class="create-dark-profile-btn" onClick={ () => { this.checkDuplicate();  } } >check</div>
@@ -319,19 +318,19 @@ class Form extends Component {
           </div>
           <div className="InputAddOn">
               <label className="InputAddOn-item" for="name">Name</label>
-              <input type="text" class="form-control" id="name" ref={input => this.name = input} defaultValue={profileData.name} name="name" placeholder="Name" autocomplete="off"  />
+              <input type="text" class="form-control" key={`name:${timestamp }`}  id="name" ref={input => this.name = input} defaultValue={profileData.name} name="name" placeholder="Name" autocomplete="off"  />
           </div>
           <div className="InputAddOn">
           <label className="InputAddOn-item" for="university">University</label>
-          <input className="form-control" id="university" name="university"  ref={input => this.university = input} type="text" defaultValue={profileData.university} />
+          <input className="form-control" id="university" key={`university:${timestamp }`}  name="university"  ref={input => this.university = input} type="text" defaultValue={profileData.university} />
         </div>
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="orgyear">Grad Yr</label>
-          <input type="number" className="form-control" defaultValue={profileData.orgyear} ref={input => this.orgyear = input} defaultValue={profileData.orgyear} id="orgyear" name="orgyear" placeholder="Graduation Year" autocomplete="off" required="true" type="number" />
+          <input type="number" className="form-control" key={`gradyear:${timestamp }`} defaultValue={profileData.orgyear} ref={input => this.orgyear = input} defaultValue={profileData.orgyear} id="orgyear" name="orgyear" placeholder="Graduation Year" autocomplete="off" required="true" type="number" />
         </div>
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="degreer">Degree</label>
-          <select class="form-control" type="text" name='degree' ref={input => this.degree = input} id="degree" required="true" value={profileData.degree} onChange={ (ev) => { this.handleSelectChange(ev,'degree') } }>
+          <select class="form-control" type="text" name='degree' key={`degree:${timestamp }`} ref={input => this.degree = input} id="degree" required="true" value={profileData.degree} onChange={ (ev) => { this.handleSelectChange(ev,'degree') } }>
                   <option value="">Choose Degree</option>
                   <option value="BE/B.Tech/BS">BE/B.Tech/BS</option>
                   <option value="ME/M.Tech">ME/M.Tech</option>
@@ -346,7 +345,7 @@ class Form extends Component {
         </div>
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="field">Field</label>
-          <select className="form-control" type="text" name='field' ref={input => this.field = input} id="field" required="true" value={profileData.field} onChange={ (ev) => { this.handleSelectChange(ev,'field') }}>
+          <select className="form-control" type="text" name='field' key={`field:${timestamp }`} ref={input => this.field = input} id="field" required="true" value={profileData.field} onChange={ (ev) => { this.handleSelectChange(ev,'field') }}>
                   <option value="">Choose Stream</option>
                   <option value="Computer Science">Computer Science</option>
                   <option value="Information Technology">Information Technology</option>
@@ -360,7 +359,7 @@ class Form extends Component {
 
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="position">Position</label>
-          <select className="form-control" type="text" name='position' ref={input => this.position = input} id="position"  required="true" value={profileData.position} onChange={ (ev) => { this.handleSelectChange(ev,'position')} } >
+          <select className="form-control" type="text" name='position' key={`position:${timestamp }`} ref={input => this.position = input} id="position"  required="true" value={profileData.position} onChange={ (ev) => { this.handleSelectChange(ev,'position')} } >
                   <option value="">Choose Job Position</option>
                   <option value="Engineering Leadership">Engineering Leadership</option>
                   <option value="Backend Engineer">Backend Engineer</option>
@@ -390,27 +389,27 @@ class Form extends Component {
 
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="orgname">Company</label>
-          <input className="form-control" ref={input => this.orgname = input} id="orgname" name="orgname" type="text" defaultValue={profileData.company} />
+          <input className="form-control" key={`orgname:${timestamp }`} ref={input => this.orgname = input} id="orgname" name="orgname" type="text" defaultValue={profileData.company} />
         </div>
         <div className="InputAddOn">
           <label className="InputAddOn-item" for="city">Location</label>
-          <input type="text" className="form-control" id="city" ref={input => this.city = input} name="city" placeholder="Current Location" autocomplete="off" defaultValue={profileData.location}/>
+          <input type="text" className="form-control" id="city" key={`city:${timestamp }`} ref={input => this.city = input} name="city" placeholder="Current Location" autocomplete="off" defaultValue={profileData.location}/>
         </div>
 
 
         <div className="InputAddOn">
           <label className="InputAddOn-item" >Fixed</label>
-          <input className="form-control" type="number" ref={input => this.base_ctc = input} id="base_ctc" name='base_ctc' placeholder="Fixed income" min='0' max='900'  step="any" defaultValue={profileData.base_ctc} />
+          <input className="form-control" type="number" key={`base_ctc:${timestamp }`} ref={input => this.base_ctc = input} id="base_ctc" name='base_ctc' placeholder="Fixed income" min='0' max='900'  step="any" defaultValue={profileData.base_ctc} />
         </div>
         <div className="InputAddOn">
           <label className="InputAddOn-item" >Variable</label>
-          <input className="form-control" type="number" ref={input => this.variable_ctc = input} id="variable_ctc" name='variable_ctc' placeholder="Variable Income" min='0' max='900' step="any" defaultValue={profileData.variable_ctc}/>
+          <input className="form-control" type="number"  key={`variable_ctc:${timestamp }`} ref={input => this.variable_ctc = input} id="variable_ctc" name='variable_ctc' placeholder="Variable Income" min='0' max='900' step="any" defaultValue={profileData.variable_ctc}/>
         </div>
 
         <div className="InputAddOn">
           <label className="InputAddOn-item"  for="notice_period">Notice</label>
           <select name="notice-period" placeholder="Notice
-                period" id="notice_period" className="form-control" ref={input => this.notice_period = input} defaultValue={profileData.notice_period} >
+                period" id="notice_period" key={`notice_period:${timestamp }`} className="form-control" ref={input => this.notice_period = input} defaultValue={profileData.notice_period} >
                 <option value="">Select notice period</option>
                 <option value="0">0 days</option>
                 <option value="15">15 days</option>
