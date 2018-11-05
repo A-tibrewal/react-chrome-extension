@@ -10,6 +10,7 @@ class Form extends Component {
     super(props);
     this.state = {
       message: '',
+      loading: false,
       success: false,
       profileData:{}
     };
@@ -140,12 +141,7 @@ class Form extends Component {
   makeMessageBox( response, type){
     let message = '';
     if( type === 'check'){
-      if( response.success ){
-        message = 'Profile -' + ( response.duplicate ? 'Present' : 'absent' ) +
-           '  Resume -' + ( response.resume_present ? 'Present' : 'absent' ) + 
-           '<br/> <a target="_blank" href="' + this.getHost() +
-            '/admin/candidates#id0eq='+response.user_id +'" >Click here </a> to see on Dashboad'; 
-      } else {
+      if( ! response.duplicate ){
         message = 'Profile Absent'
       }
     } else {
@@ -156,10 +152,12 @@ class Form extends Component {
         message = response.message;
       }
     }
+    console.log(message);
 
-    this.setState({
-      message: message
-    })
+      this.setState({
+        message: message,
+        loading: false
+      });
   }
 
   createDarkProfile = async function( ){
@@ -204,16 +202,29 @@ class Form extends Component {
 
 
   importProfile(){
-    let data = Scrapper.getProfileData();
-    this.setState({
-      profileData : data['profileData'],
-      message: data['message']
-    });
-    console.log( Scrapper.getProfileData() );
+    let location = window.location;
+    if(  (/in\/[\w-]+\/detail\/contact-info\/$/).test(location.pathname) || 
+         (/in\/[\w-]+\/$/).test(location.pathname) ||
+         ( location.pathname == '/v2/preview/preview' ) )
+      {
+
+        let data = Scrapper.getProfileData();
+        this.setState({
+          profileData : data['profileData'],
+          message: data['message']
+        });
+      } else {
+        this.setState({
+          message: 'Not a profile page'
+        });
+      }
   }
 
-
   checkDuplicate = function(){
+
+    this.setState({
+      loading: true
+    });
 
     var that = this;
     console.log('check Profile', that.getHost());
@@ -242,11 +253,15 @@ class Form extends Component {
         },
         cache:true
     }).then( function( resp ){
-        that.makeMessageBox( resp, 'check');
-        goTo(Details, resp );
+        if ( resp.duplicate ){
+          goTo(Details, resp );
+        } else {
+          that.makeMessageBox( resp, 'check');
+        }
     },function(){
         that.setState({
-          message: "NOT AUTHORIZED. Please login with your admin account"
+          message: "NOT AUTHORIZED. Please login with your admin account",
+          loading: false
         })
     })
   }
@@ -277,13 +292,13 @@ class Form extends Component {
 
 
   render() {
-    let message = this.state.message;
-    let profileData = this.state.profileData;
+    let {message, loading, profileData} = this.state;
 
     return (
       <div className="profile-form">
         <form novalidate="true">
-          <div class="message_box">
+          { loading ? (<div>Loading ... </div> ) : null }
+          <div class="message_box" style= {{ display: (message ? 'block': 'none') }}>
             <span dangerouslySetInnerHTML={{ __html: message }} />
           </div>
           <div class="import-profile" onClick={() => this.importProfile() }>Import</div>
