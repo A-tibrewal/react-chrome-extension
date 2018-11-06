@@ -7,6 +7,8 @@ import Form from './form';
 import Details from './Details';
 import "./content.css";
 import Router, { Link, goBack } from 'route-lite';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Prospects from './Prospects';
 
 class Main extends React.Component {
     render() {
@@ -20,10 +22,20 @@ class Main extends React.Component {
                         return (
                             <div>
                                 <header>InterviewBit Plus</header>
-                                <div className={'my-extension'}>
-                                    <Form />
-                                </div>
-                                
+                                <Tabs>
+                                    <TabList>
+                                        <Tab> Create Dark Profile </Tab>
+                                        <Tab> Prospects </Tab>
+                                    </TabList>
+                                    <TabPanel>
+                                        <div className={'my-extension'}>
+                                            <Form />
+                                        </div>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <Prospects />
+                                    </TabPanel>
+                                </Tabs>
                            </div>
                         )
                     }

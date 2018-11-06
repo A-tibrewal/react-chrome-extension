@@ -1,4 +1,6 @@
 import React from 'react';
+import { HOST } from './constants';
+
 const UserData = ({ user_data }) => (
     <table style={ { "width":"100%" }}>
         <tr>
@@ -11,7 +13,9 @@ const UserData = ({ user_data }) => (
         </tr>
         <tr>
             <td>Resume</td>
-            <td><a target="_blank" href={"https://www.interviewbit.com/" + user_data.resume_link } > Resume </a></td> 
+            <td>
+                {user_data.resume_link ? (<a target="_blank" href={ HOST + '/' + user_data.resume_link } > Resume </a>) : ' Please Update' }
+            </td> 
         </tr>
         <tr>
             <td>Company</td>

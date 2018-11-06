@@ -3,6 +3,7 @@ import $ from 'jquery';
 import Scrapper from './Scrapper';
 import Details from './Details';
 import { goTo } from 'route-lite';
+import { HOST } from './constants';
 
 class Form extends Component {
 
@@ -12,15 +13,13 @@ class Form extends Component {
       message: '',
       loading: false,
       success: false,
-      profileData:{}
+      profileData:{},
+      random: ''
     };
   }
 
-  getHost( dev = true ){
-    if( dev )
-      return 'http://localhost:3000'
-    else
-      return 'https://www.interviewbit.com'
+  getHost( ){
+    return HOST;
   }
 
   addFileToS3( type, file_name, file_obj ){
@@ -72,6 +71,9 @@ class Form extends Component {
         } )
       }
     )
+    .catch( function(){
+      console.log('S3 upload not working');
+    })
   }
 
 
@@ -200,17 +202,14 @@ class Form extends Component {
 
 
   importProfile(){
-    this.forceUpdate();
     let location = window.location;
     if((/in\/[\w-]+\/detail\/contact-info\/$/).test(location.pathname) || (/in\/[\w-]+\/$/).test(location.pathname) || ( location.pathname == '/v2/preview/preview' ) ) {
-          this.setState({
-            profileData: {}
-          });
           document.querySelectorAll('.InputAddOn input').forEach( (i) => {i.value =""});
           let data = Scrapper.getProfileData();
           this.setState({
             profileData : data['profileData'],
-            message: data['message']
+            message: data['message'],
+            random : Math.random().toPrecision(2)
           });
       } else {
         this.setState({
@@ -220,11 +219,6 @@ class Form extends Component {
   }
 
   checkDuplicate = function(){
-
-    this.setState({
-      loading: true
-    });
-
     var that = this;
     console.log('check Profile', that.getHost());
     var data  = {
@@ -241,7 +235,9 @@ class Form extends Component {
 
     let fileObj = this.getDataDump( {email: data.email,phone_number: data.phone_number} );
     this.addFileToS3('linkedin', Date.now(), fileObj);
-
+    this.setState({
+      loading: true
+    });
     $.ajax({
       type: "GET",
         url: that.getHost() + '/admin/duplicate-profile',
@@ -291,8 +287,12 @@ class Form extends Component {
 
 
   render() {
-    let {message, loading, profileData} = this.state;
-    let timestamp = new Date();
+    let {message, loading, profileData, random} = this.state;
+    let timestamp = random;
+    console.log( random, profileData );
+    // if( JSON.stringify(profileData) !== '{}'){
+    //   timestamp = new Date();
+    // }
     return (
       <div className="profile-form">
         <form novalidate="true">
