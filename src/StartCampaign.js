@@ -6,7 +6,9 @@ class StartCampaign extends Component {
     
     constructor(){
         super();
-        this.state = {};
+        this.state = {
+            status: ""
+        };
     }
 
     getCampaigns( ){
@@ -25,11 +27,36 @@ class StartCampaign extends Component {
     }
 
     startCampaignNow(){
-        console.log( this.campaign.value );
+        let connection_id = this.props.connection_id;
+        var formData = new FormData();
+        formData.append('campaign_id', this.campaign.value );
+        formData.append('prospect_ids[]', connection_id );
+        let that = this;
+        $.ajax({
+            url : HOST + '/hire/prospects/start-campaign',
+              dataType : 'json',
+              type : 'POST',
+              xhrFields: {
+                  withCredentials: true
+              },
+              cache : true,
+              contentType : false,
+              processData : false,
+              data : formData //formdata will contain all the other details with a name given to parameters
+          }).then( function( resp ){
+             that.setState({
+                  status: resp.message,
+              });
+        },function(){
+            that.setState({
+                status: 'Some error occurred. please contact support'
+            });
+        })
     }
 
     render(){
         const all_campaigns = this.state.campaigns || [];
+        const status = this.state.status;
         return (
             <div>
                 Do you want to start campaign ?
@@ -42,6 +69,7 @@ class StartCampaign extends Component {
                      : null
                 }
                 <button class="btn" onClick={ () => this.startCampaignNow() }> Start </button>
+                {status ? <div>{status}</div> : null}
             </div>
         )
     }
