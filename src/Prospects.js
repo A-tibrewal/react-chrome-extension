@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import { HOST } from './constants';
+import StartCampaign from './StartCampaign';
 
 class Prospects extends Component {
+
+    constructor(){
+        super();
+        this.state = {
+            status: '',
+            connection_id: ''
+        };
+    }
     
     clickHandler(){
         var formData = new FormData();
@@ -22,9 +31,14 @@ class Prospects extends Component {
               processData : false,
               data : formData //formdata will contain all the other details with a name given to parameters
           }).then( function( resp ){
-              console.log(resp);
+             that.setState({
+                  status: resp.message,
+                  connection_id: resp.connection_id
+              });
         },function(){
-            console.log('error');
+            that.setState({
+                status: 'Some error occurred. please contact support'
+            });
         })
     }
     
@@ -36,6 +50,7 @@ class Prospects extends Component {
                     <input type="text" name="email" className="form-control"  ref={input => this.email = input}  id="email" placeholder="Email" />
                 </div>
                 <button class="btn" onClick={ () => { this.clickHandler(); } }>Add to my Prospects</button>
+                <StartCampaign />
             </div>
         )
 

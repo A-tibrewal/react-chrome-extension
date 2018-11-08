@@ -33,7 +33,8 @@ class Main extends React.Component {
                                         </div>
                                     </TabPanel>
                                     <TabPanel>
-                                        <Prospects />
+                                        {/* <Prospects /> */}
+                                        <div>Coming soon</div>
                                     </TabPanel>
                                 </Tabs>
                            </div>
