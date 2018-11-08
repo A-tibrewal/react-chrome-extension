@@ -24,6 +24,10 @@ class StartCampaign extends Component {
 
     }
 
+    startCampaignNow(){
+        console.log( this.campaign.value );
+    }
+
     render(){
         const all_campaigns = this.state.campaigns || [];
         return (
@@ -32,11 +36,12 @@ class StartCampaign extends Component {
                 <button onClick={ () => this.getCampaigns() }> Get campaigns </button>
                 {
                     all_campaigns && all_campaigns.length ? 
-                        (<select>
-                            { all_campaigns.map(( item ) => (<option>{ item.name }</option>)) }
+                        (<select ref={input => this.campaign = input} >
+                            { all_campaigns.map(( item ) => (<option value={item.id} >{ item.name }</option>)) }
                         </select>)                     
                      : null
                 }
+                <button class="btn" onClick={ () => this.startCampaignNow() }> Start </button>
             </div>
         )
     }

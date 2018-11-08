@@ -180,6 +180,9 @@ class Form extends Component {
       formData.append('xhr', true);//you can append it to formdata with a proper parameter name
       formData.append('new', true);//you can append it to formdata with a proper parameter name
       var that = this;
+      this.setState({
+        loading: true
+      });
       $.ajax({
           url : that.getHost() + '/admin/create-dark-profile',
             dataType : 'json',
@@ -193,10 +196,16 @@ class Form extends Component {
             data : formData //formdata will contain all the other details with a name given to parameters
         }).then( function( resp ){
             that.makeMessageBox( resp, 'create');
+            that.setState({
+              loading: false
+            });
       },function(){
         that.setState({
           message: "NOT AUTHORIZED. Please login with your admin account"
-        })
+        });
+        that.setState({
+          loading: false
+        });
     })
   }
 
