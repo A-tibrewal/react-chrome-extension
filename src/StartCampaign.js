@@ -44,9 +44,11 @@ class StartCampaign extends Component {
               processData : false,
               data : formData //formdata will contain all the other details with a name given to parameters
           }).then( function( resp ){
-             that.setState({
-                  status: resp.message,
-              });
+            if( resp.success){
+                that.setState({
+                    status: 'Campaign started successfully',
+                });
+            }
         },function(){
             that.setState({
                 status: 'Some error occurred. please contact support'

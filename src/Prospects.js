@@ -35,8 +35,6 @@ class Prospects extends Component {
                   status: resp.message,
                   connection_id: resp.connection
               });
-              let { connection_id, status} = this.state;
-              console.log( connection_id, status, resp );
         },function(){
             that.setState({
                 status: 'Some error occurred. please contact support'
@@ -46,7 +44,6 @@ class Prospects extends Component {
     
     render(){
         let { connection_id, status} = this.state;
-        console.log( connection_id, status );
         return (
             <div >
                 {status ? <div>status</div>: null }
@@ -55,7 +52,7 @@ class Prospects extends Component {
                     <input type="text" name="email" className="form-control"  ref={input => this.email = input}  id="email" placeholder="Email" />
                 </div>
                 <button class="btn" onClick={ () => { this.clickHandler(); } }>Add to my Prospects</button>
-                {connection_id ? <StartCampaign connection_id={ this.state.connection_id }/> : null }
+                {connection_id ? <StartCampaign connection_id={ connection_id }/> : null }
             </div>
         )
 
