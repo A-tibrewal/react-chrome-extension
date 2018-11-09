@@ -28,7 +28,7 @@ class StartCampaign extends Component {
     }
 
     startCampaignNow(){
-        let connection_id = this.props.connection_id;
+        let { connection_id, email_id } = this.props;
         var formData = new FormData();
         formData.append('campaign_id', this.campaign.value );
         formData.append('prospect_ids[]', connection_id );
@@ -46,9 +46,8 @@ class StartCampaign extends Component {
               data : formData //formdata will contain all the other details with a name given to parameters
           }).then( function( resp ){
             if( resp.success){
-                const { email } = this.props;
                 that.setState({
-                    status: 'Campaign started successfully for ' + email ,
+                    status: 'Campaign started successfully for ' + email_id ,
                     finished: true
                 });
             }

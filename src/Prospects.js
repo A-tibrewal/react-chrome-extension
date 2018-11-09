@@ -107,7 +107,7 @@ class Prospects extends Component {
                                 </div>);
         return (
             <div id="add-prospects-wrapper">
-                {connection_id ? <StartCampaign email_id={email} connection_id={ connection_id }/> : <div> <div className="want-to-start-campaign" >{status ? (<div>{status}</div>): null }<br/></div> { email ? email_input : start_campaign } </div> }
+                {connection_id ? <StartCampaign email_id={this.email.value} connection_id={ connection_id }/> : <div> <div className="want-to-start-campaign" >{status ? (<div>{status}</div>): null }<br/></div> { email ? email_input : start_campaign } </div> }
             </div>
         )
 
