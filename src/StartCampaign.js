@@ -7,7 +7,8 @@ class StartCampaign extends Component {
     constructor(){
         super();
         this.state = {
-            status: ""
+            status: "",
+            finished: false
         };
     }
 
@@ -45,8 +46,10 @@ class StartCampaign extends Component {
               data : formData //formdata will contain all the other details with a name given to parameters
           }).then( function( resp ){
             if( resp.success){
+                const { email } = this.props;
                 that.setState({
-                    status: 'Campaign started successfully',
+                    status: 'Campaign started successfully for ' + email ,
+                    finished: true
                 });
             }
         },function(){
@@ -58,20 +61,36 @@ class StartCampaign extends Component {
 
     render(){
         const all_campaigns = this.state.campaigns || [];
-        const status = this.state.status;
+        
+        const { status, finished } = this.state;
+
+        const want_to_start_campaign = (<div>
+                <br/>
+                <br/>
+                <div className="want-to-start-campaign">Do you want to start campaign ?</div>
+                <button className="import-profile" style={{ width: "100%", marginTop: '10px' }} onClick={ () => this.getCampaigns() }> Yes  </button>
+            </div>);
+        
+        const all_campaigns_div = (<div>
+            <div lassName="want-to-start-campaign" >Choose one of the campaigns to start </div><br/>
+            <select ref={input => this.campaign = input} >
+                            { all_campaigns.map(( item ) => (<option value={item.id} >{ item.name }</option>)) }
+            </select>
+            <br/>
+            <button className="import-profile" style={{ width: "100%", marginTop: '10px' }} onClick={ () => this.startCampaignNow() }> Start Campaign </button>
+            <br/>
+            <br/>
+        </div>);
+
+
+
         return (
             <div>
-                Do you want to start campaign ?
-                <button onClick={ () => this.getCampaigns() }> Get campaigns </button>
                 {
-                    all_campaigns && all_campaigns.length ? 
-                        (<select ref={input => this.campaign = input} >
-                            { all_campaigns.map(( item ) => (<option value={item.id} >{ item.name }</option>)) }
-                        </select>)                     
-                     : null
+                    finished ? null : <div> { all_campaigns && all_campaigns.length ? all_campaigns_div : want_to_start_campaign } </div>
                 }
-                <button class="btn" onClick={ () => this.startCampaignNow() }> Start </button>
-                {status ? <div>{status}</div> : null}
+                
+                {status ? <div className="want-to-start-campaign" >{status}</div> : null}
             </div>
         )
     }

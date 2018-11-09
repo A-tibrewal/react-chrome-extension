@@ -159,3 +159,13 @@ body {
 .react-tabs__tab-panel--selected {
   display: block;
 }
+
+#add-prospects-wrapper{
+  padding: 20px;
+}
+
+.want-to-start-campaign{
+  font-size: 20px;
+  text-align: center;
+  line-height: 30px;
+}
